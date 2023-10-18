@@ -9,11 +9,13 @@ import org.springframework.lang.Nullable;
 
 import java.util.Date;
 
-@Entity(name = "articles")
+@Entity(name = "articles  ")
 @Getter
 @Setter
+@Builder
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleEntity {
     @Id

@@ -9,8 +9,10 @@ import org.springframework.lang.Nullable;
 @Entity(name = "users")
 @Getter
 @Setter
+@Builder
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity {
     @Id

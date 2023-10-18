@@ -13,8 +13,10 @@ import java.util.Date;
 @Entity(name = "comments")
 @Getter
 @Setter
+@Builder
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentEntity {
     @Id
