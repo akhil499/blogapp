@@ -9,7 +9,6 @@ import org.springframework.lang.Nullable;
 @Entity(name = "users")
 @Getter
 @Setter
-@Builder
 @ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
