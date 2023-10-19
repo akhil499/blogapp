@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public class UserServiceTest {
 
-    @Autowired UsersService usersService
+    @Autowired UsersService usersService;
 
     @Test
     void can_create_users() {
