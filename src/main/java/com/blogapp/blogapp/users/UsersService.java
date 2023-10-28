@@ -2,21 +2,24 @@ package com.blogapp.blogapp.users;
 
 import com.blogapp.blogapp.users.dtos.CreateUserRequest;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsersService {
     private final UsersRepository usersRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsersService(UsersRepository usersRepository, ModelMapper modelMapper) {
+    public UsersService(UsersRepository usersRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserEntity createUser(CreateUserRequest request) {
         UserEntity newUser = modelMapper.map(request, UserEntity.class);
-        //TODO: encrypt and save password
+        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
 
         return usersRepository.save(newUser);
     }
@@ -31,7 +34,9 @@ public class UsersService {
 
     public UserEntity loginUser(String username, String password) {
         var user = usersRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
-        //TODO: match the password
+        var passmatch = passwordEncoder.matches(password, user.getPassword());
+        if(!passmatch) throw new InvalidCredentialsException();
+
         return user;
     }
 
@@ -44,5 +49,11 @@ public class UsersService {
             super("User with Id: " + userId + " not found");
         }
 
+    }
+
+    public static class InvalidCredentialsException extends IllegalArgumentException {
+        public InvalidCredentialsException() {
+            super("Invalid Username or Password");
+        }
     }
 }
