@@ -10,4 +10,5 @@ public class UserResponse {
     private String email;
     private String bio;
     private String img;
+    private String token;
 }
