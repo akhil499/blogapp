@@ -19,6 +19,7 @@ public class UsersRepositoryTests {
         var user = UserEntity.builder()
                 .username("Akhil")
                 .email("kmakhil294@gmail.com")
+                .password("123abc")
                 .build();
 
         usersRepository.save(user);
@@ -31,6 +32,7 @@ public class UsersRepositoryTests {
         var user = UserEntity.builder()
                 .username("Akhil")
                 .email("kmakhil294@gmail.com")
+                .password("123abc")
                 .build();
 
         usersRepository.save(user);
