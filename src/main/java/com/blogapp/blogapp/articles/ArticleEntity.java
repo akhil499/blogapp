@@ -1,6 +1,5 @@
 package com.blogapp.blogapp.articles;
 
-import com.blogapp.blogapp.users.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -39,9 +38,15 @@ public class ArticleEntity {
     @CreatedDate
     private Date createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "authorId", nullable = false)
-    private UserEntity author;
+    @NonNull
+    private Long authorId;
+
+    @NonNull
+    private String authorName;
+
+//    @ManyToOne
+//    @JoinColumn(name = "authorId", nullable = false)
+//    private UserEntity author;
 
     //TODO: Add tags
 }

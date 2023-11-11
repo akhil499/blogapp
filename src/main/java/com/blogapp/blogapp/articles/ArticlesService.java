@@ -6,6 +6,9 @@ import com.blogapp.blogapp.users.UsersRepository;
 import com.blogapp.blogapp.users.UsersService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.Optional;
+
 @Service
 public class ArticlesService {
     private final ArticlesRepository articlesRepository;
@@ -17,6 +20,7 @@ public class ArticlesService {
     }
 
     public Iterable<ArticleEntity> getAllArticles() {
+
         return articlesRepository.findAll();
     }
 
@@ -24,6 +28,15 @@ public class ArticlesService {
         var article = articlesRepository.findBySlug(slug);
         if(article == null) {
             throw new ArticleNotFoundException(slug);
+        }
+        return article;
+    }
+
+
+    public Optional<ArticleEntity> getArticleById(long id) {
+        var article = articlesRepository.findById(id);
+        if(article == null) {
+            throw new ArticleNotFoundException(id);
         }
         return article;
     }
@@ -38,7 +51,9 @@ public class ArticlesService {
                 .slug(req.getTitle().toLowerCase().replaceAll("\\s+", "-"))
                 .body(req.getBody())
                 .subtitle(req.getSubtitle())
-                .author(author)
+                .authorId(authorId)
+                .authorName(author.getUsername())
+                .createdAt(new Date())
                 .build()
         );
     }
