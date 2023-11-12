@@ -46,3 +46,8 @@ Make a web application for blogging which has built in capabilities to handle va
 - Capability to sort feed via time of posting, topics etc.
 - Making UI responsive
 - Ability to club various blogs together under a bucket (topic) -> create a sequence of blogs
+
+## ER
+
+
+![Diagram](https://github.com/akhil499/blogapp/assets/41261344/f4a36240-daa5-4c7e-8922-3657d7cd43d3)
