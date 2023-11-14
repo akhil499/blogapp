@@ -60,6 +60,24 @@ public class ArticlesService {
 
     public ArticleEntity updateArticle(Long articleId, UpdateArticleRequest req) {
         var article = articlesRepository.findById(articleId).orElseThrow(() -> new ArticleNotFoundException(articleId));
+
+        if(req.getTitle() != null) {
+            article.setTitle(req.getTitle());
+            article.setSlug(req.getTitle().toLowerCase().replaceAll("\\s+", "-"));
+        }
+        if(req.getBody() != null) {
+            article.setBody(req.getBody());
+        }
+        if(req.getSubtitle() != null) {
+            article.setSubtitle(req.getSubtitle());
+        }
+
+        return articlesRepository.save(article);
+    }
+
+    public ArticleEntity updateArticle(String slug, UpdateArticleRequest req) {
+        var article = articlesRepository.findBySlug(slug);
+
         if(req.getTitle() != null) {
             article.setTitle(req.getTitle());
             article.setSlug(req.getTitle().toLowerCase().replaceAll("\\s+", "-"));

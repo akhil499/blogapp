@@ -28,6 +28,10 @@ public class UsersService {
         return usersRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
     }
 
+    public Iterable<UserEntity> getAllUsers() {
+        return usersRepository.findAll();
+    }
+
     public UserEntity getUser(Long userId) {
         return usersRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }

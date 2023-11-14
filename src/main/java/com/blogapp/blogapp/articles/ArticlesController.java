@@ -2,6 +2,7 @@ package com.blogapp.blogapp.articles;
 
 import com.blogapp.blogapp.articles.dtos.ArticleResponse;
 import com.blogapp.blogapp.articles.dtos.CreateArticleRequest;
+import com.blogapp.blogapp.articles.dtos.UpdateArticleRequest;
 import com.blogapp.blogapp.users.UserEntity;
 import com.blogapp.blogapp.users.UsersService;
 import org.modelmapper.ModelMapper;
@@ -65,5 +66,13 @@ public class ArticlesController {
         ArticleEntity createdArticle = articlesService.createArticle(req, user.getId());
 
         return ResponseEntity.ok("Article with Id " + createdArticle.getId() + " and title " + createdArticle.getTitle() + " is published");
+    }
+
+    @PatchMapping("/{slug}")
+    ResponseEntity<String> editArticle(@AuthenticationPrincipal UserEntity user, @PathVariable("slug") String slug, @RequestBody UpdateArticleRequest req) {
+
+        ArticleEntity createdArticle = articlesService.updateArticle(slug, req);
+        return ResponseEntity.ok("Article with Id " + createdArticle.getId() + " and slug " + createdArticle.getSlug() + " is updated"); //TODO: slug it return the latest one need to return the earlier one.
+        //TODO: For edit title, subtitle and body is mandatory params, make them optional.
     }
 }
