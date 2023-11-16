@@ -1,7 +1,5 @@
 package com.blogapp.blogapp.comments;
 
-import com.blogapp.blogapp.articles.ArticleEntity;
-import com.blogapp.blogapp.users.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,11 +31,17 @@ public class CommentEntity {
     @CreatedDate
     private Date createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "articleId", nullable = false)
-    private ArticleEntity article;
+    @NonNull
+    private Long articleId;
 
-    @ManyToOne
-    @JoinColumn(name = "authorId", nullable = false)
-    private UserEntity author;
+    @NonNull
+    private Long authorId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "articleId", nullable = false)
+//    private ArticleEntity article;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "authorId", nullable = false)
+//    private UserEntity author;
 }
