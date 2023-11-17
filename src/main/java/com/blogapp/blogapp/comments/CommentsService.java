@@ -16,9 +16,10 @@ public class CommentsService {
         this.articlesRepository = articlesRepository;
     }
 
-//    public CommentEntity getAllComments() {
-//
-//    }
+    public Iterable<CommentEntity> getAllComments(Long articleId) {
+        Iterable<CommentEntity> comments = commentsRepository.findByArticleId(articleId);
+        return comments;
+    }
 
       public CommentEntity createComment(CreateCommentRequest req, Long authorId, Long articleId) {
             return commentsRepository.save(
