@@ -3,16 +3,17 @@ package com.blogapp.blogapp.articles;
 import com.blogapp.blogapp.articles.dtos.ArticleResponse;
 import com.blogapp.blogapp.articles.dtos.CreateArticleRequest;
 import com.blogapp.blogapp.articles.dtos.UpdateArticleRequest;
+import com.blogapp.blogapp.commons.dtos.ErrorResponse;
 import com.blogapp.blogapp.users.UserEntity;
 import com.blogapp.blogapp.users.UsersService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/articles")
@@ -45,7 +46,7 @@ public class ArticlesController {
 
     @GetMapping("/{id}")
     ResponseEntity<ArticleResponse> getArticleById(@PathVariable("id") long id) {
-        Optional<ArticleEntity> article =  articlesService.getArticleById(id);
+        ArticleEntity article =  articlesService.getArticleById(id);
         var articleResponse = modelMapper.map(article, ArticleResponse.class);
 
         return ResponseEntity.ok(articleResponse);
@@ -74,5 +75,29 @@ public class ArticlesController {
         ArticleEntity createdArticle = articlesService.updateArticle(slug, req);
         return ResponseEntity.ok("Article with Id " + createdArticle.getId() + " and slug " + createdArticle.getSlug() + " is updated"); //TODO: slug it return the latest one need to return the earlier one.
         //TODO: For edit title, subtitle and body is mandatory params, make them optional.
+    }
+
+    @ExceptionHandler({
+            ArticlesService.ArticleNotFoundException.class
+    })
+    ResponseEntity<ErrorResponse> handleArticleNotFoundException(Exception ex) {
+
+        String message;
+        HttpStatus status;
+
+        if(ex instanceof ArticlesService.ArticleNotFoundException) {
+            message = ex.getMessage();
+            status = HttpStatus.NOT_FOUND;
+        }  else
+        {
+            message = "Something went wrong";
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+
+        ErrorResponse response = ErrorResponse.builder()
+                .message(message)
+                .build();
+        return ResponseEntity.status(status).body(response);
     }
 }

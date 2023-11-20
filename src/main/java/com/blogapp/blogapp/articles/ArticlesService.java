@@ -7,7 +7,6 @@ import com.blogapp.blogapp.users.UsersService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class ArticlesService {
@@ -33,11 +32,9 @@ public class ArticlesService {
     }
 
 
-    public Optional<ArticleEntity> getArticleById(long id) {
-        var article = articlesRepository.findById(id);
-        if(article == null) {
-            throw new ArticleNotFoundException(id);
-        }
+    public ArticleEntity getArticleById(long id) {
+        var article = articlesRepository.findById(id).orElseThrow(() -> new ArticleNotFoundException(id));;
+
         return article;
     }
 
@@ -94,11 +91,11 @@ public class ArticlesService {
 
     static class ArticleNotFoundException extends IllegalArgumentException {
         public ArticleNotFoundException(String slug) {
-            super("Article " + slug + " not found");
+            super("Article with slug " + slug + " is not found");
         }
 
         public ArticleNotFoundException(Long articleId) {
-            super("Article with Id: " + articleId + " not found");
+            super("Article with Id: " + articleId + " is not found");
         }
     }
 }
