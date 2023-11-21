@@ -1,14 +1,13 @@
 package com.blogapp.blogapp.profiles;
 
+import com.blogapp.blogapp.commons.dtos.ErrorResponse;
 import com.blogapp.blogapp.profiles.dtos.ProfileResponse;
 import com.blogapp.blogapp.users.UserEntity;
 import com.blogapp.blogapp.users.UsersService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +46,31 @@ public class ProfilesController {
         ProfileResponse response = modelMapper.map(user, ProfileResponse.class);
 
         return ResponseEntity.ok(response);
+    }
+
+    @ExceptionHandler({
+            UsersService.UserNotFoundException.class,
+            UsersService.InvalidCredentialsException.class
+    })
+    ResponseEntity<ErrorResponse> handleUserNotFoundException(Exception ex) {
+
+        String message;
+        HttpStatus status;
+
+        if(ex instanceof UsersService.UserNotFoundException) {
+            message = ex.getMessage();
+            status = HttpStatus.NOT_FOUND;
+        } else
+        {
+            message = "Something went wrong";
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+
+        ErrorResponse response = ErrorResponse.builder()
+                .message(message)
+                .build();
+        return ResponseEntity.status(status).body(response);
     }
 
 }
