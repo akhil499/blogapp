@@ -62,11 +62,11 @@ public class ArticlesController {
     }
 
     @PostMapping("")
-    ResponseEntity<String> createArticle(@AuthenticationPrincipal UserEntity user, @RequestBody CreateArticleRequest req) {
+    ResponseEntity createArticle(@AuthenticationPrincipal UserEntity user, @RequestBody CreateArticleRequest req) {
 
         ArticleEntity createdArticle = articlesService.createArticle(req, user.getId());
 
-        return ResponseEntity.ok("Article with Id " + createdArticle.getId() + " and title " + createdArticle.getTitle() + " is published");
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{slug}")

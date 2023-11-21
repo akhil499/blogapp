@@ -43,10 +43,10 @@ public class CommentsController {
     }
 
     @PostMapping("")
-    ResponseEntity<String> createComment(@AuthenticationPrincipal UserEntity user, @PathVariable("articleId") Long articleId, @RequestBody CreateCommentRequest req) {
+    ResponseEntity createComment(@AuthenticationPrincipal UserEntity user, @PathVariable("articleId") Long articleId, @RequestBody CreateCommentRequest req) {
         CommentEntity createdComment = commentsService.createComment(req, user.getId(), articleId);
 
-        return ResponseEntity.ok("Comment is published");
+        return ResponseEntity.noContent().build();
     }
 
 
