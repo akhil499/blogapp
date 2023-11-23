@@ -77,6 +77,13 @@ public class ArticlesController {
         //TODO: For edit title, subtitle and body is mandatory params, make them optional.
     }
 
+    @DeleteMapping("/{articleId}")
+    ResponseEntity<String> deleteArticle(@AuthenticationPrincipal UserEntity user, @PathVariable("articleId") long articleId) throws Exception {
+        Long deletedArticleId = articlesService.deleteArticle(articleId, user.getId());
+
+        return ResponseEntity.ok("Deleted article with id: " + deletedArticleId);
+    } //TODO: Handle exception
+
     @ExceptionHandler({
             ArticlesService.ArticleNotFoundException.class
     })

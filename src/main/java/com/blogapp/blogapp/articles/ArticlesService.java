@@ -89,6 +89,21 @@ public class ArticlesService {
         return articlesRepository.save(article);
     }
 
+    public Long deleteArticle(long articleId, long userId) throws Exception {
+
+            ArticleEntity article = articlesRepository.findById(articleId).orElseThrow(() -> new ArticleNotFoundException(articleId));
+
+            if (article.getAuthorId() == userId) {
+                articlesRepository.deleteById(articleId);
+                return article.getId();
+            } else {
+                throw new Exception("Author can only delete"); //TODO: UPDATE WITH CUSTOM EXCEPTION
+
+            }
+
+    }
+
+
     static class ArticleNotFoundException extends IllegalArgumentException {
         public ArticleNotFoundException(String slug) {
             super("Article with slug " + slug + " is not found");
@@ -98,4 +113,5 @@ public class ArticlesService {
             super("Article with Id: " + articleId + " is not found");
         }
     }
+
 }
