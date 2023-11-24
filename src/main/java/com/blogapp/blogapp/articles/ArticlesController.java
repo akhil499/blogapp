@@ -85,7 +85,8 @@ public class ArticlesController {
     } //TODO: Handle exception
 
     @ExceptionHandler({
-            ArticlesService.ArticleNotFoundException.class
+            ArticlesService.ArticleNotFoundException.class,
+            ArticlesService.userNotAuthorizedException.class
     })
     ResponseEntity<ErrorResponse> handleArticleNotFoundException(Exception ex) {
 
@@ -95,7 +96,10 @@ public class ArticlesController {
         if(ex instanceof ArticlesService.ArticleNotFoundException) {
             message = ex.getMessage();
             status = HttpStatus.NOT_FOUND;
-        }  else
+        } else if(ex instanceof ArticlesService.userNotAuthorizedException) {
+            message = ex.getMessage();
+            status = HttpStatus.UNAUTHORIZED;
+        } else
         {
             message = "Something went wrong";
             status = HttpStatus.INTERNAL_SERVER_ERROR;

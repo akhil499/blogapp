@@ -97,7 +97,7 @@ public class ArticlesService {
                 articlesRepository.deleteById(articleId);
                 return article.getId();
             } else {
-                throw new Exception("Author can only delete"); //TODO: UPDATE WITH CUSTOM EXCEPTION
+                throw new userNotAuthorizedException();
 
             }
 
@@ -112,6 +112,10 @@ public class ArticlesService {
         public ArticleNotFoundException(Long articleId) {
             super("Article with Id: " + articleId + " is not found");
         }
+    }
+
+    static class userNotAuthorizedException extends IllegalArgumentException {
+        public userNotAuthorizedException() { super("Author can only delete");}
     }
 
 }
