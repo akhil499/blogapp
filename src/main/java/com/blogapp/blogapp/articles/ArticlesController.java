@@ -6,6 +6,7 @@ import com.blogapp.blogapp.articles.dtos.UpdateArticleRequest;
 import com.blogapp.blogapp.commons.dtos.ErrorResponse;
 import com.blogapp.blogapp.users.UserEntity;
 import com.blogapp.blogapp.users.UsersService;
+import com.sun.jdi.request.InvalidRequestStateException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,10 +64,21 @@ public class ArticlesController {
 
     @PostMapping("")
     ResponseEntity createArticle(@AuthenticationPrincipal UserEntity user, @RequestBody CreateArticleRequest req) {
+        try{
+            ArticleEntity createdArticle = articlesService.createArticle(req, user.getId());
 
-        ArticleEntity createdArticle = articlesService.createArticle(req, user.getId());
+            return ResponseEntity.noContent().build();
+        } catch (InvalidRequestStateException e) {
+            ErrorResponse response = ErrorResponse.builder()
+                    .message("Invalid request body.")
+                    .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 
-        return ResponseEntity.noContent().build();
+        }  catch (Exception ex) {
+
+        return handleArticleNotFoundException(ex);
+    }
+
     }
 
     @PatchMapping("/{slug}")
